@@ -1,0 +1,15 @@
+README.md
+pyproject.toml
+backend/__init__.py
+backend/app/__init__.py
+backend/app/main.py
+backend/app/api/__init__.py
+backend/app/database/__init__.py
+backend/app/ingestion/__init__.py
+backend/app/search/__init__.py
+backend/tests/test_health.py
+recall_local_search.egg-info/PKG-INFO
+recall_local_search.egg-info/SOURCES.txt
+recall_local_search.egg-info/dependency_links.txt
+recall_local_search.egg-info/requires.txt
+recall_local_search.egg-info/top_level.txt
