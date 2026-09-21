@@ -3,9 +3,14 @@ from pathlib import Path
 
 from backend.app.ingestion.models import Document
 
-INSERT_DOCUMENT = """
+UPSERT_DOCUMENT = """
 INSERT INTO documents (path, filename, content, size)
 VALUES (?, ?, ?, ?)
+ON CONFLICT(path) DO UPDATE SET
+    filename = excluded.filename,
+    content = excluded.content,
+    size = excluded.size
+RETURNING id
 """
 
 
@@ -14,15 +19,15 @@ def save_document(database_path: Path, document: Document) -> int:
 
     try:
         cursor = connection.execute(
-            INSERT_DOCUMENT,
+            UPSERT_DOCUMENT,
             (str(document.path), document.filename, document.content, document.size),
         )
+        saved_row = cursor.fetchone()
         connection.commit()
 
-        if cursor.lastrowid is None:
+        if saved_row is None:
             raise RuntimeError("SQLite did not return an id for the saved document")
 
-        return cursor.lastrowid
+        return saved_row[0]
     finally:
         connection.close()
-
